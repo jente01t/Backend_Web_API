@@ -1,16 +1,18 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import userRoutes from './routes/userRoutes.mjs';
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB:', err));
+
+app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
