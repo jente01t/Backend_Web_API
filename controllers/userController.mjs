@@ -1,10 +1,17 @@
 import User from "../models/UserModel.mjs";
 
 export const registerUser = async (req, res) => {
-    const {username, password} = req.body;
+    const {firstName, lastName, email, phoneNumber, birthDate, password} = req.body;
 
     try {
-        const user = new User({username, password});
+        const user = new User({
+            firstName,
+            lastName, 
+            email,
+            phoneNumber,
+            birthDate,
+            password
+        });
         await user.save();
         res.status(201).json({message: 'User registered successfully'});
     } catch (error) {
@@ -13,10 +20,10 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-    const {username, password} = req.body;
+    const {email, password} = req.body;
 
     try {
-        const user = await User.findOne({username});
+        const user = await User.findOne({email});
         if (user && await user.matchPassword(password)) {
             res.status(200).json({message: 'User logged in successfully'});
         } else {
@@ -29,7 +36,7 @@ export const loginUser = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
     try {
-        const usersname = await User.find({}).select('username');
+        const usersname = await User.find({}).select('firstName lastName email phoneNumber birthDate'); 
         res.status(200).json(usersname);
     } catch (error) {
         res.status(400).json({message: error.message});
@@ -53,7 +60,11 @@ export const updateUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (user) {
-            user.username = req.body.username || user.username;
+            user.firstName = req.body.firstName || user.firstName;
+            user.lastName = req.body.lastName || user.lastName;
+            user.email = req.body.email || user.email;
+            user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
+            user.birthDate = req.body.birthDate || user.birthDate;
             if (req.body.password) {
                 user.password = req.body.password;
             }
@@ -80,4 +91,3 @@ export const deleteUser = async (req, res) => {
         res.status(400).json({message: error.message});
     }
 }
-
