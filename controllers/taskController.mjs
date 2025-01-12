@@ -16,16 +16,29 @@ export const createTask = async (req, res) => {
 
 export const getTasks = async (req, res) => {
     try {
+        const { limit = 10, offset = 0 } = req.query;
         const filters = {};
         if (req.query.status) filters.status = req.query.status;
         if (req.query.priority) filters.priority = req.query.priority;
         if (req.query.assignedTo) filters.assignedTo = req.query.assignedTo;
 
+        const totalTasks = await Task.countDocuments(filters);
         const tasks = await Task.find(filters)
             .populate('assignedTo', 'firstName lastName')
             .populate('createdBy', 'firstName lastName')
-            .sort({ dueDate: 1 });
-        res.status(200).json(tasks);
+            .sort({ dueDate: 1 })
+            .limit(parseInt(limit))
+            .skip(parseInt(offset));
+
+        res.status(200).json({
+            tasks,
+            pagination: {
+                total: totalTasks,
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                hasMore: offset + tasks.length < totalTasks
+            }
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

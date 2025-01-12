@@ -57,8 +57,23 @@ export const loginUser = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}).select('firstName lastName email phoneNumber birthDate');
-        res.status(200).json(users);
+        const { limit = 10, offset = 0 } = req.query;
+        
+        const totalUsers = await User.countDocuments();
+        const users = await User.find({})
+            .select('firstName lastName email phoneNumber birthDate')
+            .limit(parseInt(limit))
+            .skip(parseInt(offset));
+
+        res.status(200).json({
+            users,
+            pagination: {
+                total: totalUsers,
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                hasMore: offset + users.length < totalUsers
+            }
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
