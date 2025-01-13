@@ -17,7 +17,511 @@ app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Backend API Documentation</title>
+    </head>
+    <body>
+        <h1>API Documentation - Tasks API</h1>
+
+        <details id="authentication">
+            <summary>Authentication</summary>
+            <div class="endpoint">
+                <p>Bearer Token required for protected endpoints</p>
+                <pre>Authorization: Bearer YOUR_JWT_TOKEN</pre>
+            </div>
+        </details>
+
+        <details id="users">
+            <summary>Users Endpoints</summary>
+            
+            <details id="register">
+                <summary>Register User</summary>
+                <div class="endpoint">
+                    <p><strong>URL:</strong> POST /api/users/register</p>
+                    <p><strong>Authentication:</strong> None</p>
+                    <p><strong>Request Body Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>firstName</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Minimum 2 characters<br>
+                                - Only letters, spaces and hyphens allowed<br>
+                                - Will be trimmed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>lastName</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Minimum 2 characters<br>
+                                - Only letters, spaces and hyphens allowed<br>
+                                - Will be trimmed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Must be unique<br>
+                                - Valid email format<br>
+                                - Will be converted to lowercase
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>phoneNumber</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>Format: +32 XXX XX XX XX</td>
+                        </tr>
+                        <tr>
+                            <td>age</td>
+                            <td>Number</td>
+                            <td>Yes</td>
+                            <td>
+                                - Must be between 0 and 120<br>
+                                - Must be a positive number
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>Minimum 6 characters</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Example Request:</strong></p>
+                    <pre>
+{
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "test@example.com",
+    "phoneNumber": "+32 123 45 67 89",
+    "age": 30,
+    "password": "test123"
+}
+                    </pre>
+                    <p><strong>Response:</strong></p>
+                    <p><strong>Success Response (201):</strong></p>
+                    <pre>
+{
+    "message": "User registered successfully",
+    "userId": "user_id"
+}
+                    </pre>
+                    <p><strong>Error Response (400):</strong></p>
+                    <pre>
+{
+    "message": "Error message here"
+}
+                    </pre>
+                </div>
+            </details>
+
+            <details id="login">
+                <summary>Login User</summary>
+                <div class="endpoint">
+                    <p><strong>URL:</strong> POST /api/users/login</p>
+                    <p><strong>Authentication:</strong> None</p>
+
+                    <p><strong>Request Body Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Must be a valid email format<br>
+                                - Will be converted to lowercase<br>
+                                - Must exist in the database
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Minimum 6 characters<br>
+                                - Will be compared against the stored hashed password
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Example Request:</strong></p>
+                    <pre>
+{
+    "email": "test@example.com",
+    "password": "test123"
+}
+                    </pre>
+
+                    <p><strong>Response:</strong></p>
+                    <p><strong>Success Response (200):</strong></p>
+                    <pre>
+{
+    "token": "jwt_token_here",
+    "user": {
+        "id": "user_id",
+        "firstName": "Test",
+        "lastName": "User",
+        "email": "test@example.com"
+    }
+}
+                    </pre>
+
+                    <p><strong>Error Response (401):</strong></p>
+                    <pre>
+{
+    "message": "Invalid email or password"
+}
+                    </pre>
+
+                    <p><strong>Error Response (500):</strong></p>
+                    <pre>
+{
+    "message": "Server error",
+    "error": "error_message_here"
+}
+                    </pre>
+                </div>
+            </details>
+
+            <details id="get-users">
+                <summary>Get All Users</summary>
+                <div class="endpoint">
+                    <p><strong>URL:</strong> GET /api/users</p>
+                    <p><strong>Authentication:</strong> Required</p>
+
+                    <p><strong>Request Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>Number</td>
+                            <td>No</td>
+                            <td>
+                                - Default: 10<br>
+                                - Controls the number of users returned
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>offset</td>
+                            <td>Number</td>
+                            <td>No</td>
+                            <td>
+                                - Default: 0<br>
+                                - Controls the starting point for the users to be returned
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Example Request:</strong></p>
+                    <pre>
+{
+  "limit": 10,
+  "offset": 0
+}
+                    </pre>
+
+                    <p><strong>Response:</strong></p>
+                    <p><strong>Success Response (200):</strong></p>
+                    <pre>
+{
+  "users": [
+      {
+          "_id": "user_id",
+          "firstName": "Test",
+          "lastName": "User",
+          "email": "test@example.com",
+          "phoneNumber": "+32 123 45 67 89"
+      }
+  ],
+  "pagination": {
+      "total": 1,
+      "limit": 10,
+      "offset": 0,
+      "hasMore": false
+  }
+}
+                    </pre>
+
+                    <p><strong>Error Response (400):</strong></p>
+                    <pre>
+{
+    "message": "Error message here"
+}
+                    </pre>
+                </div>
+            </details>
+
+            <details id="get-user">
+                <summary>Get User by ID</summary>
+                <div class="endpoint">
+                    <p><strong>URL:</strong> GET /api/users/:id</p>
+                    <p><strong>Authentication:</strong> Required</p>
+
+                    <p><strong>Request Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Must be a valid user ID<br>
+                                - Should correspond to an existing user in the database
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Example Request:</strong></p>
+                    <pre>
+{
+    "id": "user_id"
+}
+                    </pre>
+
+                    <p><strong>Response:</strong></p>
+                    <p><strong>Success Response (200):</strong></p>
+                    <pre>
+{
+    "id": "user_id",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "test@example.com"
+}
+                    </pre>
+
+                    <p><strong>Error Response (404):</strong></p>
+                    <pre>
+{
+    "message": "User not found"
+}
+                    </pre>
+
+                    <p><strong>Error Response (400):</strong></p>
+                    <pre>
+{
+    "message": "Error message here"
+}
+                    </pre>
+                </div>
+            </details>
+
+            <details id="update-user">
+                <summary>Update User</summary>
+                <div class="endpoint">
+                    <p><strong>URL:</strong> PUT /api/users/:id</p>
+                    <p><strong>Authentication:</strong> Required</p>
+
+                    <p><strong>Request Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Must be a valid user ID<br>
+                                - Should correspond to an existing user in the database
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Request Body Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>firstName</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>
+                                - Minimum 2 characters<br>
+                                - Only letters, spaces, and hyphens allowed<br>
+                                - Will be trimmed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>lastName</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>
+                                - Minimum 2 characters<br>
+                                - Only letters, spaces, and hyphens allowed<br>
+                                - Will be trimmed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>
+                                - Must be a valid email format<br>
+                                - Will be converted to lowercase<br>
+                                - Should be unique
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>phoneNumber</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>Format: +32 XXX XX XX XX</td>
+                        </tr>
+                        <tr>
+                            <td>age</td>
+                            <td>Number</td>
+                            <td>No</td>
+                            <td>
+                                - Must be between 0 and 120<br>
+                                - Must be a positive number
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>String</td>
+                            <td>No</td>
+                            <td>
+                                - Minimum 6 characters<br>
+                                - Only required if changing the password
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Example Request:</strong></p>
+                    <pre>
+{
+    "firstName": "UpdatedFirstName",
+    "lastName": "UpdatedLastName",
+    "email": "updated.email@example.com",
+    "phoneNumber": "+32 456 78 91 13",
+    "age": 30,
+    "password": "newPassword123"
+}
+                    </pre>
+
+                    <p><strong>Response:</strong></p>
+                    <p><strong>Success Response (200):</strong></p>
+                    <pre>
+{
+    "message": "User updated successfully"
+}
+                    </pre>
+
+                    <p><strong>Error Response (404):</strong></p>
+                    <pre>
+{
+    "message": "User not found"
+}
+                    </pre>
+
+                    <p><strong>Error Response (400):</strong></p>
+                    <pre>
+{
+    "message": "Error message here"
+}
+                    </pre>
+                </div>
+            </details>
+
+            <details id="delete-user">
+                <summary>Delete User</summary>
+                <div class="endpoint">
+                    <p><strong>URL:</strong> DELETE /api/users/:id</p>
+                    <p><strong>Authentication:</strong> Required</p>
+
+                    <p><strong>Request Parameters:</strong></p>
+                    <table class="parameter-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation Rules</th>
+                        </tr>
+                        <tr>
+                            <td>id</td>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td>
+                                - Must be a valid user ID (typically a MongoDB ObjectId)<br>
+                                - Should correspond to an existing user in the database
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Example Request:</strong></p>
+                    <pre>
+{
+    "id": "user_id"
+}
+                    </pre>
+
+                    <p><strong>Response:</strong></p>
+                    <p><strong>Success Response (200):</strong></p>
+                    <pre>
+{
+    "message": "User deleted successfully"
+}
+                    </pre>
+
+                    <p><strong>Error Response (404):</strong></p>
+                    <pre>
+{
+    "message": "User not found"
+}
+                    </pre>
+
+                    <p><strong>Error Response (400):</strong></p>
+                    <pre>
+{
+    "message": "Error message here"
+}
+                    </pre>
+                </div>
+            </details>
+        </details>
+        </details>
+    </body>
+    </html>
+  `);
 });
 
 const PORT = process.env.PORT || 3000;
