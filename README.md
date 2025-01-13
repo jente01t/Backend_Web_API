@@ -82,3 +82,8 @@ Access the API documentation by visiting the root URL (`/`) after starting the s
 - https://github.com/kelektiv/node.bcrypt.js
 - https://blog.logrocket.com/password-hashing-node-js-bcrypt/
 - https://chatgpt.com/share/6784eaf5-a96c-800b-92dd-567fe5bd1e8e
+
+## Postman tests
+
+![Postman](https://github.com/user-attachments/assets/bd2cd740-cdba-42e3-9eae-734af2146e22)
+
