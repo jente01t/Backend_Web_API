@@ -86,5 +86,10 @@ Access the API documentation by visiting the root URL (`/`) after starting the s
 
 ## Postman tests
 
+Als u zelf de API wilt testen met Postman kunt u deze files importen:
+- [Environment](Postman/Backend%20API.postman_environment.json)
+- [Collection](Postman/Backend%20API%20Tests.postman_collection.json) 
+
+
 ![Postman](https://github.com/user-attachments/assets/bd2cd740-cdba-42e3-9eae-734af2146e22)
 
