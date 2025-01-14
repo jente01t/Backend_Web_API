@@ -11,7 +11,7 @@ Tasks kunnen worden gemaakt, opgehaald, bijgewerkt, en verwijderd.
 
 1. **Clone the repository**
 ```bash
-git clone <https://github.com/jente01t/Backend_Web_API>
+git clone https://github.com/jente01t/Backend_Web_API
 cd Backend_Web_API
 ```
 
@@ -75,6 +75,7 @@ Access the API documentation by visiting the root URL (`/`) after starting the s
 ## References
 
 - Github Copilot Complitions in Visual Studio Code
+- https://canvas.ehb.be/courses/40595
 - https://expressjs.com/en/guide/routing.html
 - https://www.mongodb.com/resources/products/platform/mongodb-atlas-tutorial
 - https://stackoverflow.com/questions/63804747/how-to-generate-and-set-jwt-secret-and-jwt-expiration-time-in-express
