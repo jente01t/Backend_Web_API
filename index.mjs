@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.mjs';
 import taskRoutes from './routes/taskRoutes.mjs';
 
+
 dotenv.config();
 
 const app = express();
@@ -22,6 +23,93 @@ app.get('/', (req, res) => {
     <html>
     <head>
         <title>Backend API Documentation</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+            
+            h1 {
+                color: #2c3e50;
+                border-bottom: 2px solid #3498db;
+                padding-bottom: 10px;
+                margin-bottom: 30px;
+            }
+            
+            h2 {
+                color: #2c3e50;
+                margin-top: 40px;
+                font-weight: 600;
+            }
+            
+            h3 {
+                color: #3498db;
+                margin-top: 30px;
+                padding: 10px 0;
+                border-top: 1px solid #eee;
+            }
+            
+            pre {
+                background-color: #f8f9fa;
+                border: 1px solid #e9ecef;
+                border-radius: 4px;
+                padding: 15px;
+                overflow-x: auto;
+                font-family: 'Consolas', monospace;
+                margin: 15px 0;
+            }
+
+            .parameter-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 16px;
+                text-align: left;
+
+                th, td {
+                    padding: 12px 15px;
+                    border: 1px solid #ddd;
+                }
+
+                th {
+                    background-color: #f2f2f2;
+                    color: #333;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
+
+                tr:hover {
+                    background-color: #f1f1f1;
+                }
+            }
+            
+            details {
+                background: white;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 15px 0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            summary {
+                cursor: pointer;
+                padding: 10px;
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            
+            summary:hover {
+                background-color: #f8f9fa;
+            }
+            
+        </style>
     </head>
     <body>
         <h1>API Documentation - Tasks API</h1>
