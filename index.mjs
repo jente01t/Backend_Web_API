@@ -518,6 +518,599 @@ app.get('/', (req, res) => {
                 </div>
             </details>
         </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <details id="tasks">
+    <summary>Tasks Endpoints</summary>
+    
+    <details id="create-task">
+        <summary>Create Task</summary>
+        <div class="endpoint">
+            <p><strong>URL:</strong> POST /api/tasks</p>
+            <p><strong>Authentication:</strong> Required</p>
+            
+            <p><strong>Request Body:</strong></p>
+            <table class="parameter-table">
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Validation Rules</th>
+                </tr>
+                <tr>
+                    <td>title</td>
+                    <td>String</td>
+                    <td>Yes</td>
+                    <td>
+                        - Minimum 3 characters<br>
+                        - Will be trimmed
+                    </td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>String</td>
+                    <td>No</td>
+                    <td>
+                        - Maximum 1000 characters<br>
+                        - Will be trimmed
+                    </td>
+                </tr>
+                <tr>
+                    <td>dueDate</td>
+                    <td>Date</td>
+                    <td>Yes</td>
+                    <td>
+                        - Must be in the future<br>
+                        - Will be validated
+                    </td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>String</td>
+                    <td>Yes</td>
+                    <td>
+                        - Must be one of: 'pending', 'in-progress', or 'completed'<br>
+                        - Default: 'pending'
+                    </td>
+                </tr>
+                <tr>
+                    <td>priority</td>
+                    <td>String</td>
+                    <td>Yes</td>
+                    <td>
+                        - Must be one of: 'low', 'medium', or 'high'<br>
+                        - Default: 'medium'
+                    </td>
+                </tr>
+                <tr>
+                    <td>assignedTo</td>
+                    <td>String (ObjectId)</td>
+                    <td>Yes</td>
+                    <td>
+                        - Must be a valid user ID<br>
+                        - References the 'User' model
+                    </td>
+                </tr>
+            </table>
+
+            <p><strong>Example Request:</strong></p>
+            <pre>
+{
+    "title": "Test Task",
+    "description": "Test Description",
+    "dueDate": "2024-12-31",
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": "user_id_here"
+}
+            </pre>
+
+            <p><strong>Response:</strong></p>
+            <p><strong>Success Response (201):</strong></p>
+            <pre>
+{
+    "_id": "task_id",
+    "title": "Test Task",
+    "description": "Test Description",
+    "dueDate": "2024-12-31T00:00:00.000Z",
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": {
+        "_id": "user_id",
+        "firstName": "Test",
+        "lastName": "User"
+    },
+    "createdBy": {
+        "_id": "user_id",
+        "firstName": "Test",
+        "lastName": "User"
+    },
+    "createdAt": "2024-03-14T12:00:00.000Z",
+    "updatedAt": "2024-03-14T12:00:00.000Z"
+}
+            </pre>
+
+            <p><strong>Error Response (400):</strong></p>
+            <pre>
+{
+    "message": "Error message here"
+}
+            </pre>
+        </div>
+    </details>
+
+
+            <details id="get-tasks">
+    <summary>Get All Tasks</summary>
+    <div class="endpoint">
+        <p><strong>URL:</strong> GET /api/tasks</p>
+        <p><strong>Authentication:</strong> Required</p>
+
+        <p><strong>Query Parameters:</strong></p>
+        <table class="parameter-table">
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>limit</td>
+                <td>Number</td>
+                <td>No</td>
+                <td>Het maximum aantal taken om te retourneren (standaard: 10).</td>
+            </tr>
+            <tr>
+                <td>offset</td>
+                <td>Number</td>
+                <td>No</td>
+                <td>Het aantal te overslaan taken voor paginering (standaard: 0).</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>String</td>
+                <td>No</td>
+                <td>Filter taken op basis van hun status (mogelijk: 'pending', 'in-progress', 'completed').</td>
+            </tr>
+            <tr>
+                <td>priority</td>
+                <td>String</td>
+                <td>No</td>
+                <td>Filter taken op basis van hun prioriteit (mogelijk: 'low', 'medium', 'high').</td>
+            </tr>
+            <tr>
+                <td>assignedTo</td>
+                <td>String (ObjectId)</td>
+                <td>No</td>
+                <td>Filter taken toegewezen aan een specifieke gebruiker op basis van gebruikers-ID.</td>
+            </tr>
+        </table>
+
+        <p><strong>Request Example:</strong></p>
+        <pre>
+{
+    "limit": 10,
+    "offset": 0,
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": "user_id_here"
+}
+        </pre>
+
+        <p><strong>Response:</strong></p>
+        <p><strong>Success Response (200):</strong></p>
+        <pre>
+{
+    "tasks": [
+        {
+            "_id": "task_id",
+            "title": "Test Task",
+            "description": "Test Description",
+            "dueDate": "2024-12-31T00:00:00.000Z",
+            "status": "pending",
+            "priority": "medium",
+            "assignedTo": {
+                "_id": "user_id",
+                "firstName": "Test",
+                "lastName": "User"
+            },
+            "createdBy": {
+                "_id": "user_id",
+                "firstName": "Test",
+                "lastName": "User"
+            },
+            "createdAt": "2024-03-14T12:00:00.000Z",
+            "updatedAt": "2024-03-14T12:00:00.000Z"
+        },
+        {
+            "_id": "task_id_2",
+            "title": "Another Task",
+            "description": "Another Description",
+            "dueDate": "2024-12-31T00:00:00.000Z",
+            "status": "completed",
+            "priority": "high",
+            "assignedTo": {
+                "_id": "user_id_2",
+                "firstName": "Another",
+                "lastName": "User"
+            },
+            "createdBy": {
+                "_id": "user_id_2",
+                "firstName": "Another",
+                "lastName": "User"
+            },
+            "createdAt": "2024-03-14T12:00:00.000Z",
+            "updatedAt": "2024-03-14T12:00:00.000Z"
+        }
+    ],
+    "pagination": {
+        "total": 20,
+        "limit": 10,
+        "offset": 0,
+        "hasMore": true
+    }
+}
+        </pre>
+
+        <p><strong>Error Response (400):</strong></p>
+        <pre>
+{
+    "message": "Error message here"
+}
+        </pre>
+    </div>
+</details>
+
+
+
+            <details id="get-task">
+    <summary>Get Task by ID</summary>
+    <div class="endpoint">
+        <p><strong>URL:</strong> GET /api/tasks/:id</p>
+        <p><strong>Authentication:</strong> Required</p>
+
+        <p><strong>Parameters:</strong></p>
+        <table class="parameter-table">
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>String (ObjectId)</td>
+                <td>Yes</td>
+                <td>De unieke ID van de taak die je wilt ophalen.</td>
+            </tr>
+        </table>
+
+        <p><strong>Request Example:</strong></p>
+        <pre>
+{
+    "id": "task_id_here"
+}
+        </pre>
+
+        <p><strong>Response:</strong></p>
+        <p><strong>Success Response (200):</strong></p>
+        <pre>
+{
+    "_id": "task_id",
+    "title": "Test Task",
+    "description": "Test Description",
+    "dueDate": "2024-12-31T00:00:00.000Z",
+    "status": "pending",
+    "priority": "medium",
+    "assignedTo": {
+        "_id": "user_id",
+        "firstName": "Test",
+        "lastName": "User"
+    },
+    "createdBy": {
+        "_id": "user_id",
+        "firstName": "Test",
+        "lastName": "User"
+    },
+    "createdAt": "2024-03-14T12:00:00.000Z",
+    "updatedAt": "2024-03-14T12:00:00.000Z"
+}
+        </pre>
+
+        <p><strong>Error Response (404):</strong></p>
+        <pre>
+{
+    "message": "Task not found"
+}
+        </pre>
+
+        <p><strong>Error Response (400):</strong></p>
+        <pre>
+{
+    "message": "Error message here"
+}
+        </pre>
+    </div>
+</details>
+
+
+            <details id="update-task">
+    <summary>Update Task</summary>
+    <div class="endpoint">
+        <p><strong>URL:</strong> PUT /api/tasks/:id</p>
+        <p><strong>Authentication:</strong> Required</p>
+
+        <p><strong>Parameters:</strong></p>
+        <table class="parameter-table">
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>String (ObjectId)</td>
+                <td>Yes</td>
+                <td>De unieke ID van de taak die je wilt bijwerken.</td>
+            </tr>
+        </table>
+
+        <p><strong>Request Body:</strong></p>
+        <table class="parameter-table">
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Validation Rules</th>
+            </tr>
+            <tr>
+                <td>title</td>
+                <td>String</td>
+                <td>No</td>
+                <td>Minimaal 3 tekens</td>
+            </tr>
+            <tr>
+                <td>description</td>
+                <td>String</td>
+                <td>No</td>
+                <td>Maximaal 1000 tekens</td>
+            </tr>
+            <tr>
+                <td>dueDate</td>
+                <td>Date</td>
+                <td>Yes</td>
+                <td>Moet in de toekomst liggen</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>Waarde kan zijn: 'pending', 'in-progress', 'completed'</td>
+            </tr>
+            <tr>
+                <td>priority</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>Waarde kan zijn: 'low', 'medium', 'high'</td>
+            </tr>
+            <tr>
+                <td>assignedTo</td>
+                <td>String (ObjectId)</td>
+                <td>Yes</td>
+                <td>Moet een geldige gebruikers-ID zijn</td>
+            </tr>
+        </table>
+
+        <p><strong>Request Example:</strong></p>
+        <pre>
+{
+    "title": "Updated Task Title",
+    "description": "Updated Task Description",
+    "dueDate": "2025-01-31",
+    "status": "completed",
+    "priority": "high",
+    "assignedTo": "user_id_here"
+}
+        </pre>
+
+        <p><strong>Response:</strong></p>
+        <p><strong>Success Response (200):</strong></p>
+        <pre>
+{
+    "_id": "task_id",
+    "title": "Updated Task Title",
+    "description": "Updated Task Description",
+    "dueDate": "2025-01-31T00:00:00.000Z",
+    "status": "completed",
+    "priority": "high",
+    "assignedTo": {
+        "_id": "user_id",
+        "firstName": "Test",
+        "lastName": "User"
+    },
+    "createdBy": {
+        "_id": "user_id",
+        "firstName": "Test",
+        "lastName": "User"
+    },
+    "createdAt": "2024-03-14T12:00:00.000Z",
+    "updatedAt": "2024-03-14T12:00:00.000Z"
+}
+        </pre>
+
+        <p><strong>Error Response (404):</strong></p>
+        <pre>
+{
+    "message": "Task not found"
+}
+        </pre>
+
+        <p><strong>Error Response (400):</strong></p>
+        <pre>
+{
+    "message": "Error message here"
+}
+        </pre>
+    </div>
+</details>
+
+
+            <details id="user-tasks">
+    <summary>Get User's Tasks</summary>
+    <div class="endpoint">
+        <p><strong>URL:</strong> GET /api/tasks/user/:userId</p>
+        <p><strong>Authentication:</strong> Required</p>
+
+        <p><strong>Parameters:</strong></p>
+        <table class="parameter-table">
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>userId</td>
+                <td>String (ObjectId)</td>
+                <td>Yes</td>
+                <td>De unieke ID van de gebruiker waarvan je de taken wilt ophalen.</td>
+            </tr>
+        </table>
+
+        <p><strong>Response:</strong></p>
+        <p><strong>Success Response (200):</strong></p>
+        <pre>
+[
+    {
+        "_id": "task_id",
+        "title": "Test Task",
+        "description": "Test Description",
+        "dueDate": "2024-12-31T00:00:00.000Z",
+        "status": "pending",
+        "priority": "medium",
+        "assignedTo": {
+            "_id": "user_id",
+            "firstName": "Test",
+            "lastName": "User"
+        },
+        "createdBy": {
+            "_id": "user_id",
+            "firstName": "Test",
+            "lastName": "User"
+        },
+        "createdAt": "2024-03-14T12:00:00.000Z",
+        "updatedAt": "2024-03-14T12:00:00.000Z"
+    },
+    {
+        "_id": "task_id_2",
+        "title": "Another Task",
+        "description": "Another Description",
+        "dueDate": "2024-12-31T00:00:00.000Z",
+        "status": "completed",
+        "priority": "high",
+        "assignedTo": {
+            "_id": "user_id_2",
+            "firstName": "Another",
+            "lastName": "User"
+        },
+        "createdBy": {
+            "_id": "user_id_2",
+            "firstName": "Another",
+            "lastName": "User"
+        },
+        "createdAt": "2024-03-14T12:00:00.000Z",
+        "updatedAt": "2024-03-14T12:00:00.000Z"
+    }
+]
+        </pre>
+
+        <p><strong>Error Response (400):</strong></p>
+        <pre>
+{
+    "message": "Error message here"
+}
+        </pre>
+    </div>
+</details>
+
+
+            <details id="delete-task">
+    <summary>Delete Task</summary>
+    <div class="endpoint">
+        <p><strong>URL:</strong> DELETE /api/tasks/:id</p>
+        <p><strong>Authentication:</strong> Required</p>
+
+        <p><strong>Parameters:</strong></p>
+        <table class="parameter-table">
+            <tr>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Required</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>String (ObjectId)</td>
+                <td>Yes</td>
+                <td>De unieke ID van de taak die je wilt verwijderen.</td>
+            </tr>
+        </table>
+
+        <p><strong>Request Body:</strong></p>
+        <pre>
+{
+    "id": "task_id_here"
+}
+        </pre>
+
+        <p><strong>Response:</strong></p>
+        <p><strong>Success Response (200):</strong></p>
+        <pre>
+{
+    "message": "Task deleted successfully",
+    "taskId": "task_id_here"
+}
+        </pre>
+
+        <p><strong>Error Response (404):</strong></p>
+        <pre>
+{
+    "message": "Task not found"
+}
+        </pre>
+
+        <p><strong>Error Response (400):</strong></p>
+        <pre>
+{
+    "message": "Error message here"
+}
+        </pre>
+    </div>
+</details>
+
         </details>
     </body>
     </html>
