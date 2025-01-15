@@ -8,19 +8,21 @@ Tasks kunnen worden gemaakt, opgehaald, bijgewerkt, en verwijderd.
 
 
 ## Setup Instructies
+1. **voorwaarden**
+- Node.js en npm geïnstalleerd
 
-1. **Clone the repository**
+2. **Clone the repository**
 ```bash
 git clone https://github.com/jente01t/Backend_Web_API
 cd Backend_Web_API
 ```
 
-2. **Install dependencies**
+3. **Install dependencies**
 ```bash
 npm install
 ```
 
-3. **Environment Setup**
+4. **Environment Setup**
 Create a .env file in the root directory with:
 
 ```env
@@ -30,7 +32,7 @@ JWT_SECRET=9b67ae6b19727d7fc53638e89b5a238d85b97260ef10f3c8855fdd0c2177a4ee
 JWT_EXPIRES_IN=24h
 ```
 
-4. **Start the server**
+5. **Start the server**
 ```bash
 npm start
 ```
