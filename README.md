@@ -27,8 +27,8 @@ Create a .env file in the root directory with:
 
 ```env
 PORT=3000
-MONGODB_URI=mongodb+srv://PublicUser:D2Uhcn25rcNeEf2eci5k@bw.4aenc.mongodb.net/?retryWrites=true&w=majority&appName=BW
-JWT_SECRET=9b67ae6b19727d7fc53638e89b5a238d85b97260ef10f3c8855fdd0c2177a4ee
+MONGODB_URI=**********************************************
+JWT_SECRET=************************************************
 JWT_EXPIRES_IN=24h
 ```
 
